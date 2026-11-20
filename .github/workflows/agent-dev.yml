@@ -145,6 +145,8 @@ jobs:
           allow-users: ${{ env.PO_LOGIN }}
 
       - id: patch
+        env:
+          FINAL_MESSAGE: ${{ steps.run_codex.outputs.final-message }}
         run: |
           set -euo pipefail
           # Exclure le contexte de mission et les workflows du patch.
@@ -155,7 +157,7 @@ jobs:
           else
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           fi
-          printf '%s\n' "${{ steps.run_codex.outputs.final-message }}" > agent-summary.md || true
+          printf '%s\n' "$FINAL_MESSAGE" > agent-summary.md
 
       - uses: actions/upload-artifact@v4
         with:
